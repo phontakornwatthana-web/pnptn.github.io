@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>สภานักเรียน</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sriracha&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; }
+    /* body { background: #0a0a0a; color: #fff; } */
+
+    #loading {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #1a0000, #0a0a0a);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      z-index: 9999;
+      transition: opacity 0.6s ease;
+    }
+
+    #loading.hide { opacity: 0; pointer-events: none; }
+    #loading img { width: 140px; animation: pulse 1.4s infinite; }
+    #loading p { margin-top: 20px; font-size: 1.1rem; }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    header {
+      /* background: linear-gradient(135deg, #b00000 0%, #4a0000 50%, #000 100%); */
+      padding: 80px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      background: rgba(255, 59, 59, 0.1);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    header img {
+      width: 300=px;
+      height: auto;
+      margin-bottom: 20=px;
+      filter: drop-shadow(0 0 20px rgba(255, 59, 59, 0.3));
+    }
+
+    header h1 {
+      font-size: 3.5rem;
+      color: #ff3b3b;
+      margin-bottom: 10px;
+      text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    header p {
+      color: #ddd;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* ===== NAV ===== */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  padding: 20px 0;
+  border-bottom: 3px solid #b00000;
+  flex-wrap: wrap;
+  backdrop-filter: blur(10px);
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  padding: 8px 15px;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: #ff3b3b;
+  transition: 0.3s;
+}
+
+nav a:hover {
+  color: #ff3b3b;
+  background: rgba(255, 59, 59, 0.1);
+  transform: translateY(-2px);
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+    section {
+      padding: 60px 5%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    section h2 {
+      color: #ff3b3b;
+      margin-bottom: 30px;
+      border-left: 5px solid #ff3b3b;
+      padding-left: 15px;
+      font-size: 2rem;
+    }
+
+    section p {
+      line-height: 1.8;
+      color: #ccc;
+      font-size: 1.05rem;
+      margin-bottom: 15px;
+    }
+
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 30px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(1px);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: #ff3b3b;
+      box-shadow: 0 10px 30px rgba(255, 59, 59, 0.2);
+    }
+
+    .card h3 {
+      color: #ff3b3b;
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+    }
+
+    .card p {
+      color: #bbb;
+    }
+
+    footer {
+      background: #000;
+      text-align: center;
+      padding: 40px 20px;
+      color: #888;
+      border-top: 2px solid #b00000;
+      margin-top: 60px;
+    }
+
+    footer p {
+      margin: 10px 0;
+      color: #888;
+    }
+
+    .footer-info {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-info span {
+      color: #ff3b3b;
+      font-weight: 600;
+    }
+
+    .credit {
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #333;
+    }
+
+    @media (max-width: 768px) {
+      header h1 { font-size: 2.2rem; }
+      nav { gap: 15px; }
+      section { padding: 40px 5%; }
+      header img { width: 140px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="loading">
+    <img src="img/icontest.png" alt="Loading">
+    <p>กำลังโหลด...</p>
+  </div>
+
+  <header>
+    <img src="img/a.png" alt="Logo">
+    <h1>เพื่อน้องพี่พร้อมพัฒนา</h1>
+    <p>เสียงของคุณคือ เข็มทิศ นโยบายที่เราคิดคือ ภารกิจ ที่ต้องทํา</p>
+  </header>
+
+  <nav>
+    <a href="index.html">เกี่ยวกับเรา</a>
+    <a href="members.html">สมาชิก</a>
+    <a href="policy.html">นโยบาย</a>
+    <a href="https://www.instagram.com/pnptn_official?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">
+    ติดต่อเรา
+  </a>
+    <a href="https://www.tiktok.com/@pnptn.official?_r=1&_t=ZS-93V8OjMNyXS" target="_blank">Tiktok</a>
+    <a href="#report">แจ้งปัญหา</a>
+    <a href="#community">community</a>
+  </nav>
+
+  <section id="about">
+    <div class="card">
+        <h2>คำขวัญประจำพรรค</h2>
+        <p>เสียงของคุณคือ เข็มทิศ นโยบายที่เราคิดคือ ภารกิจ ที่ต้องทํา</p>
+      </div>
+    
+  </section>
+
+  <section id="news">
+    <div class="card">
+    <h2>แจ้งข่าวสาร</h2>
+    <p>ติดตามข่าวสารและกิจกรรมต่างๆของสภานักเรียนได้ที่ช่องทางโซเชียลมีเดียของเรา</p>
+    </div>
+    <br>
+      <div class="card">
+        <h2>gmail</h2>
+        <p>PhueaNongPhiPhromPhatthana.offi@gmail.com</p><br>
+
+        
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 สภานักเรียน</p>
+    <div class="footer-info">
+      <div><span>📞</span> 062-543-4950</div>
+
+    </div>
+    <div class="credit">created by promptix team</div>
+  </footer>
+
+  <script>
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.getElementById("loading").classList.add("hide");
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

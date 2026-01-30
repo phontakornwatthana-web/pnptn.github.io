@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สภานักเรียน | สมาชิก</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sriracha&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; }
+    body { background: #0a0a0a; color: #fff; }
+
+    /* ===== LOADING SCREEN ===== */
+    #loading-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #1a0000, #0a0a0a);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    #loading-screen.hide {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    #loading-screen img {
+      width: 140px;
+      margin-bottom: 15px;
+      animation: logoPulse 1.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(255, 59, 59, 0.3));
+    }
+
+    #loading-screen p {
+      font-size: 1.1rem;
+    }
+
+    @keyframes logoPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* ===== HEADER ===== */
+    header {
+  background: linear-gradient(135deg, #b00000 0%, #4a0000 50%, #000 100%);
+  padding: 80px 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background-image: url("img/background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      background: rgba(255, 59, 59, 0.1);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    header h1 {
+      font-size: 3.5rem;
+      color: #ff3b3b;
+      margin-bottom: 10px;
+      text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      position: relative;
+      z-index: 1;
+    }
+
+    header p {
+      color: #ddd;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== NAV ===== */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  padding: 20px 0;
+  border-bottom: 3px solid #b00000;
+  flex-wrap: wrap;
+  backdrop-filter: blur(10px);
+}
+
+nav a {
+    font-family: 'Sriracha', cursive;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  padding: 8px 15px;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: #ff3b3b;
+  transition: 0.3s;
+}
+
+nav a:hover {
+  color: #ff3b3b;
+  background: rgba(255, 59, 59, 0.1);
+  transform: translateY(-2px);
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+    /* ===== SECTION ===== */
+    section {
+      padding: 60px 5%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    section h2 {
+      color: #ff3b3b;
+      margin-bottom: 40px;
+      border-left: 5px solid #ff3b3b;
+      padding-left: 15px;
+      font-size: 2rem;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      border-left: none;
+      padding-left: 0;
+    }
+
+    section h2:first-of-type {
+      margin-bottom: 60px;
+      margin-top: 40px;
+    }
+
+    /* ===== FLIP CARDS ===== */
+    .leadership-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+
+    .flip-card {
+      width: 260px;
+      height: 340px;
+      perspective: 1200px;
+    }
+
+    .flip-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.7s ease;
+    }
+
+    .flip-card:hover .flip-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-front,
+    .flip-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(176, 0, 0, 0.15), rgba(0, 0, 0, 0.3));
+      border: 1px solid rgba(255, 59, 59, 0.3);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .flip-back {
+      transform: rotateY(180deg);
+    }
+
+    .flip-front img {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+      border: 3px solid #ff3b3b;
+      box-shadow: 0 0 20px rgba(255, 59, 59, 0.3);
+    }
+
+    .flip-front h3,
+    .flip-back h3 {
+      color: #ff3b3b;
+      margin: 10px 0 5px;
+      font-size: 1.2rem;
+    }
+
+    .flip-front p,
+    .flip-back p {
+      color: #ccc;
+      font-size: 0.95rem;
+      margin: 3px 0;
+    }
+
+    .flip-back a {
+      color: #ff3b3b;
+      text-decoration: none;
+      margin-top: 10px;
+      transition: 0.3s;
+      font-weight: 600;
+    }
+
+    .flip-back a:hover {
+      text-decoration: underline;
+    }
+
+    .flip-back .btn {
+      background: rgba(255, 59, 59, 0.2);
+      border: 1px solid #ff3b3b;
+      color: #ff3b3b;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    .flip-back .btn:hover {
+      background: #ff3b3b;
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    .leadership-row {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ===== MEMBER CARDS ===== */
+    .member-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 28px;
+      margin-bottom: 40px;
+    }
+
+    .member-card {
+      background: linear-gradient(135deg, rgba(176, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+      border: 1px solid rgba(255, 59, 59, 0.3);
+      border-radius: 15px;
+      padding: 25px 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .member-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255, 59, 59, 0.15), transparent);
+      opacity: 0;
+      transition: 0.4s;
+    }
+
+    .member-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: #ff3b3b;
+      box-shadow: 0 15px 40px rgba(255, 59, 59, 0.2);
+    }
+
+    .member-card:hover::before {
+      opacity: 1;
+    }
+
+    .member-card a {
+      text-decoration: none;
+    }
+
+    .member-card img {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+      border: 3px solid #ff3b3b;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255, 59, 59, 0.2);
+      position: relative;
+      z-index: 1;
+    }
+
+    .member-card:hover img {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px rgba(255, 59, 59, 0.4);
+    }
+
+    .member-card h3 {
+      color: #ff3b3b;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .member-card p {
+      color: #ccc;
+      font-size: 0.95rem;
+      margin: 3px 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== MODAL ===== */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.3s;
+      z-index: 10000;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    
+
+    .modal-content {
+      background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 450px;
+      animation: popup 0.3s ease;
+      border: 1px solid rgba(255, 59, 59, 0.3);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    @keyframes popup {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .close {
+      float: right;
+      font-size: 28px;
+      cursor: pointer;
+      color: #ff3b3b;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .close:hover {
+      color: #fff;
+    }
+
+    .modal-content h2 {
+      color: #ff3b3b;
+      margin-bottom: 15px;
+    }
+
+    .modal-content p {
+      color: #ccc;
+      margin: 10px 0;
+    }
+
+    .modal-content hr {
+      border: none;
+      border-top: 1px solid rgba(255, 59, 59, 0.3);
+      margin: 15px 0;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #000;
+      text-align: center;
+      padding: 40px 20px;
+      color: #888;
+      border-top: 2px solid #b00000;
+      margin-top: 60px;
+    }
+
+    footer p {
+      margin: 10px 0;
+    }
+
+    .footer-info {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-info span {
+      color: #ff3b3b;
+      font-weight: 600;
+    }
+
+    .credit {
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #333;
+    }
+    header h1 {
+  font-family: 'Sriracha', cursive;
+}
+
+header p {
+  font-family: 'Sriracha', cursive;
+}
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      header h1 { font-size: 2.2rem; }
+      nav { gap: 15px; }
+      section { padding: 40px 5%; }
+      .leadership-row { gap: 25px; }
+      .flip-card { width: 100%; max-width: 220px; height: 300px; }
+      .member-grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 480px) {
+      header h1 { font-size: 1.8rem; }
+      section { padding: 30px 3%; }
+      .member-grid-4 { grid-template-columns: 1fr; }
+      .flip-card { width: 90%; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="loading-screen">
+    <img src="img/icontest.png" alt="Loading">
+    <p>กำลังโหลด...</p>
+  </div>
+
+  <header>
+    <h1>สมาชิกสภานักเรียน</h1>
+    <p>โครงสร้างการบริหาร</p>
+  </header>
+
+  <nav>
+    <a href="index.html">เกี่ยวกับเรา</a>
+    <a href="members.html">สมาชิก</a>
+    <a href="policy.html">นโยบาย</a>
+    <a href="https://www.instagram.com/pnptn_official?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">
+    ติดต่อเรา
+  </a>
+    <a href="https://www.tiktok.com/@pnptn.official?_r=1&_t=ZS-93V8OjMNyXS" target="_blank">Tiktok</a>
+    <a href="#report">แจ้งปัญหา</a>
+    <a href="#community">community</a>
+  </nav>
+
+  <section>
+    <!-- ประธาน -->
+    <div class="leadership-section">
+      <h2 style="
+  text-align: center;
+  border: none;
+  padding: 0;
+  margin: 60px 0 40px 0;
+  font-family: 'Sriracha', cursive;
+">
+  ประธาน
+</h2>
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img src="img/peoimg/top.JPG" alt="ประธาน">
+            <h3>ประธานนักเรียน</h3>
+            <p>นางสาวนราวัลย์ วงค์แสนอาจ</p>
+            <p>ม.4/2</p>
+          </div>
+          <div class="flip-back">
+            <h3>สายการเรียน</h3>
+            <p>liberal art & management</p>
+
+            <a href="https://www.instagram.com/sazz.xg09?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">my profile</a>
+            <button class="btn" onclick="openModal('ประธานนักเรียน', 'นางสาวนราวัลย์ วงค์แสนอาจ', 'ม.4/2', 'คติประจำใจ: ไม่ใช่ตัวเลือกแต่คือคำตอบ')">ดูเพิ่มเติม</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- รองประธาน -->
+    <h2 style="
+  text-align: center;
+  border: none;
+  padding: 0;
+  margin: 60px 0 40px 0;
+  font-family: 'Sriracha', cursive;
+">
+  รองประธาน
+</h2>
+    <div class="leadership-row">
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img src="img/peoimg/tong.JPG" alt="รองฝ่ายบริหาร">
+            <h3>รองฝ่ายบริหารทั่วไป</h3>
+            <p>นางสาวณิชากร สิงห์ครทา</p>
+            <p>ม.4/4</p>
+          </div>
+          <div class="flip-back">
+            <h3>สายการเรียน</h3>
+            <p>science engineering program</p>
+            <a href="https://www.instagram.com/babebynicha_/?utm_source=ig_web_button_share_sheet" target="_blank">my profile</a>
+            <button class="btn" onclick="openModal('รองฝ่ายบริหารทั่วไป', 'นางสาวณิชากร สิงห์ครทา', 'ม.4/4', 'คติประจำใจ: ดูแลยิ่งกว่าประกันภัยใส่ใจยิ่งกว่าแฟนก็ต้องเบอร์พวกพี่นะค้าบ')">ดูเพิ่มเติม</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img src="img/peoimg/cheeta.jpg" alt="รองฝ่ายกิจกรรม">
+            <h3>รองฝ่ายบริหารกิจกรรม</h3>
+            <p>นายธนโชติ ศรีนาเมือง</p>
+            <p>ม.4/4</p>
+          </div>
+          <div class="flip-back">
+            <h3>สายการเรียน</h3>
+            <p>ฝ่ายกิจกรรม</p>
+            <a href="https://www.instagram.com/4modtanoi/?utm_source=ig_web_button_share_sheet" target="_blank">my profile</a>
+            <button class="btn" onclick="openModal('รองฝ่ายบริหารกิจกรรม', 'นายธนโชติ ศรีนาเมือง', 'ม.4/4', '<br>คติประจำใจ: ถึงพี่จะไม่ใช่ซีเคร็ทแต่พี่ก็อยากเป็นสภาที่เด็ดปี 69')">ดูเพิ่มเติม</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- เลขา เหรัญญิก -->
+    <h2 style="
+  text-align: center;
+  border: none;
+  padding: 0;
+  margin: 60px 0 40px 0;
+  font-family: 'Sriracha', cursive;
+">
+  ผู้บริหาร
+</h2>
+    <div class="leadership-row">
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img src="img/peoimg/photo.JPG" alt="เลขานุการ">
+            <h3>เลขานุการ</h3>
+            <p>นายพนธกร วัฒนะ</p>
+            <p>ม.4/4</p>
+          </div>
+          <div class="flip-back">
+            <h3>สายการเรียน</h3>
+            <p>science engineering program</p>
+            <a href="https://www.instagram.com/boomz_a007?igsh=dTExeWJtdXJ1MmEy" target="_blank">my profile</a>
+            <button class="btn" onclick="openModal('เลขานุการ', 'นายพนธกร วัฒนะ', 'ม.4/4', 'ผลงานเด่น: รองชนะเลิศอันดับที่ 2 WRG 2025<br>คติประจำใจ: ตั้งใจแล้วทำให้สุด')">ดูเพิ่มเติม</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img src="img/peoimg/namfon.JPG" alt="เหรัญญิก">
+            <h3>เหรัญญิก</h3>
+            <p>นางสาวณัฐชยา ศรีปรางค์</p>
+            <p>ม.4/4</p>
+          </div>
+          <div class="flip-back">
+            <h3>สายการเรียน</h3>
+            <p>science engineering program</p>
+            <a href="https://www.instagram.com/_nchayaa/?utm_source=ig_web_button_share_sheet" target="_blank">my profile</a>
+            <button class="btn" onclick="openModal('เหรัญญิก', 'นางสาวณัฐชยา ศรีปรางค์', 'ม.4/4', 'คติประจำใจ: รักชาติให้ยืนตรงแต่ถ้าอยากได้สภาที่มั้นคงต้องเบอร์ 4')">ดูเพิ่มเติม</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- สมาชิก -->
+    <h2 style="
+  text-align: center;
+  border: none;
+  padding: 0;
+  margin: 60px 0 40px 0;
+  font-family: 'Sriracha', cursive;
+">
+  สมาชิกสภานักเรียน
+</h2>
+    <div class="member-grid-4">
+      <div class="member-card">
+        <a href="https://www.instagram.com/kasidit_sirapat?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">
+          <img src="img/peoimg/him.JPG" alt="สมาชิก">
+        </a>
+        <h3>นายกษิดิศ ศิระพัฒน์</h3>
+        <p>ม.4/4</p>
+      </div>
+
+      <div class="member-card">
+        <a href="https://www.instagram.com/panyawatbs?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">
+          <img src="img/peoimg/poom.JPG" alt="สมาชิก">
+        </a>
+        <h3>นายปัญญวัฒน์ แพงชัยภูมิ</h3>
+        <p>ม.4/4</p>
+      </div>
+
+      <div class="member-card">
+        <a href="https://www.instagram.com/3neau.tm?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">
+          <img src="img/peoimg/noart.JPG" alt="สมาชิก">
+        </a>
+        <h3>นางสาวณิดาพรรณ คำไมอาจ</h3>
+        <p>ม.4/13</p>
+      </div>
+
+      <div class="member-card">
+        <a href="https://www.instagram.com/kxo_jao/?utm_source=ig_web_button_share_sheet" target="_blank">
+          <img src="img/peoimg/jo.JPG" alt="สมาชิก">
+        </a>
+        <h3>นายนิตินนท์ ไตรธาตรี</h3>
+        <p>ม.4/1</p>
+      </div>
+
+      <div class="member-card">
+        <a href="https://www.instagram.com/kittikaaa.aa/?utm_source=ig_web_button_share_sheet" target="_blank">
+          <img src="img/peoimg/kit.JPG" alt="สมาชิก">
+        </a>
+        <h3>นางสาวกิตติกา ปานอินทร์</h3>
+        <p>ม.4/3</p>
+      </div>
+
+      <div class="member-card">
+        <a href="https://www.instagram.com/satang_phattaraphorn/?utm_source=ig_web_button_share_sheet" target="_blank">
+          <img src="img/peoimg/last.JPG" alt="สมาชิก">
+        </a>
+        <h3>นางสาวภัทรภร ทองเชิญ</h3>
+        <p>ม.4/3</p>
+      </div>
+
+      <div class="member-card">
+        <a href="https://www.instagram.com/phetqz/?utm_source=ig_web_button_share_sheet" target="_blank">
+          <img src="img/peoimg/apison.JPG" alt="สมาชิก">
+        </a>
+        <h3>นางสาวอภัทธ์สร อาจธนพร</h3>
+        <p>ม.4/3</p>
+      </div>
+
+      <div class="member-card">
+        <a href="https://www.instagram.com/nkx.2_9?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">
+          <img src="img/peoimg/nink.JPG" alt="สมาชิก">
+        </a>
+        <h3>นางสาวสุชาดา แสนทวีสุข</h3>
+        <p>ม.4/4</p>
+      </div>
+
+      <div class="member-card">
+        <a href="https://www.instagram.com/chayanin_n_n/?utm_source=ig_web_button_share_sheet" target="_blank">
+          <img src="img/peoimg/nua.JPG" alt="สมาชิก">
+        </a>
+        <h3>นางสาวชญานิน ไวยสุภา</h3>
+        <p>ม.4/4</p>
+      </div>
+
+      <div class="member-card">
+        <a href="https://www.instagram.com/khaofang09_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">
+          <img src="img/peoimg/fang.JPG" alt="สมาชิก">
+        </a>
+        <h3>นางสาวชาลิสา เทพรักษ์</h3>
+        <p>ม.4/4</p>
+      </div>
+
+      <div class="member-card">
+        <a href="https://www.instagram.com/chaness_tea/?utm_source=ig_web_button_share_sheet" target="_blank">
+          <img src="img/peoimg/chaness.JPG" alt="สมาชิก">
+        </a>
+        <h3>นางสาวกันติยา สถาพร</h3>
+        <p>ม.4/4</p>
+      </div>
+
+      <div class="member-card">
+        <a href="https://www.instagram.com/lovedonut53?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">
+          <img src="img/peoimg/nan.JPG" alt="สมาชิก">
+        </a>
+        <h3>นางสาวณัฐวดี มีสมภพ</h3>
+        <p>ม.4/3</p>
+      </div>
+
+      <div class="member-card">
+        <a href="https://www.instagram.com/gnopita_/?utm_source=ig_web_button_share_sheet" target="_blank">
+          <img src="img/peoimg/c.JPG" alt="สมาชิก">
+        </a>
+        <h3>นายอธิพงค์ ชาววาณิช</h3>
+        <p>ม.4/3</p>
+      </div>
+
+      <div class="member-card">
+        <a href="https://www.instagram.com/_ttrongmo/?utm_source=ig_web_button_share_sheet" target="_blank">
+          <img src="img/peoimg/watermelon.JPG" alt="สมาชิก">
+        </a>
+        <h3>นายนนทวัชร์ โสสีทา</h3>
+        <p>ม.4/4</p>
+      </div>
+
+      <div class="member-card">
+        <a href="https://www.instagram.com/daisy_pun18x?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">
+          <img src="img/peoimg/vi.JPG" alt="สมาชิก">
+        </a>
+        <h3>นายวิภพ โพธิ์ทาราม</h3>
+        <p>ม.4/10</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 สภานักเรียน</p>
+    <div class="footer-info">
+      <div><span>📞</span> 062-543-4950</div>
+
+    </div>
+    <div class="credit">created by promptix team</div>
+  </footer>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">×</span>
+      <h2 id="modal-title"></h2>
+      <p id="modal-name"></p>
+      <p id="modal-class"></p>
+      <hr>
+      <p id="modal-detail"></p>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.getElementById("loading-screen").classList.add("hide");
+      }, 1000);
+    });
+
+    function openModal(title, name, cls, detail) {
+      document.getElementById("modal-title").innerText = title;
+      document.getElementById("modal-name").innerText = "ชื่อ: " + name;
+      document.getElementById("modal-class").innerText = "ระดับชั้น: " + cls;
+      document.getElementById("modal-detail").innerHTML = detail;
+      document.getElementById("modal").classList.add("show");
+    }
+
+    function closeModal() {
+      document.getElementById("modal").classList.remove("show");
+    }
+
+    window.addEventListener("click", (event) => {
+      const modal = document.getElementById("modal");
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สภานักเรียน | นโยบาย</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sriracha&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="policy.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; }
+    body { background: #0a0a0a; color: #fff; }
+
+    /* ===== LOADING ===== */
+    #loading {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #1a0000, #0a0a0a);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 0.6s ease;
+    }
+
+    #loading.hide { opacity: 0; pointer-events: none; }
+    #loading img { width: 140px; animation: pulse 1.4s infinite; filter: drop-shadow(0 0 20px rgba(255, 59, 59, 0.3)); }
+    #loading p { margin-top: 20px; font-size: 1.1rem; }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .sriracha {
+  font-family: 'Sriracha', cursive;
+}   
+
+    /* ===== HEADER ===== */
+    
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      background: rgba(255, 59, 59, 0.1);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    header h1 {
+      font-size: 3.5rem;
+      color: #ff3b3b;
+      text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      position: relative;
+      z-index: 1;
+    }
+
+    header p {
+      margin-top: 10px;
+      color: #ddd;
+      font-size: 1.1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      padding: 20px 0;
+      border-bottom: 3px solid #b00000;
+      flex-wrap: wrap;
+      backdrop-filter: blur(10px);
+    }
+
+    nav a {
+      font-family: 'Sriracha', cursive;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 8px 15px;
+      border-radius: 5px;
+    }
+
+    nav a:hover {
+      color: #ff3b3b;
+      background: rgba(255, 59, 59, 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* ===== SECTION ===== */
+    section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 5%;
+    }
+
+    section h2 {
+      text-align: center;
+      color: #ff3b3b;
+      margin-bottom: 50px;
+      font-size: 2.2rem;
+      border: none;
+    }
+
+    /* ===== POLICY SELECTOR ===== */
+    .policy-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 25px;
+      margin-bottom: 60px;
+    }
+
+    .policy-box {
+      font-family: 'Sriracha', cursive;
+  letter-spacing: 0.5px;
+  font-size: 1.05rem;
+  cursor: pointer;
+      background: linear-gradient(135deg, #b00000, #8a0000);
+      border-radius: 16px;
+      padding: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 140px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      color: white;
+      border: 1px solid rgba(255, 59, 59, 0.3);
+      box-shadow: 0 5px 20px rgba(176, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .policy-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      opacity: 0;
+      transition: 0.4s;
+    }
+
+    .policy-box:hover {
+      transform: translateY(-8px) scale(1.02);
+      background: linear-gradient(135deg, #ff3b3b, #b00000);
+      box-shadow: 0 15px 40px rgba(255, 59, 59, 0.3);
+    }
+
+    .policy-box:hover::before {
+      opacity: 1;
+    }
+
+    /* ===== POLICY CONTENT ===== */
+    .policy-content {
+      display: none;
+      background: linear-gradient(135deg, rgba(176, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+      border: 1px solid rgba(255, 59, 59, 0.3);
+      padding: 40px;
+      border-radius: 16px;
+      animation: fadeUp 0.4s ease;
+      backdrop-filter: blur(10px);
+      margin-top: 40px;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .policy-content h2 {
+      color: #ff3b3b;
+      margin-bottom: 20px;
+      border-left: 5px solid #ff3b3b;
+      padding-left: 15px;
+      text-align: left;
+      border: none;
+      font-size: 1.8rem;
+    }
+
+    .policy-content p {
+      color: #ccc;
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #000;
+      text-align: center;
+      padding: 40px 20px;
+      color: #888;
+      border-top: 2px solid #b00000;
+      margin-top: 60px;
+    }
+
+    footer p {
+      margin: 10px 0;
+    }
+
+    .footer-info {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-info span {
+      color: #ff3b3b;
+      font-weight: 600;
+    }
+
+    .credit {
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #333;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      header h1 { font-size: 2.2rem; }
+      section { padding: 40px 5%; }
+      .policy-container { grid-template-columns: 1fr; }
+      .policy-content { padding: 25px; }
+    }
+
+    @media (max-width: 480px) {
+      header h1 { font-size: 1.8rem; }
+      section { padding: 30px 3%; }
+      nav { gap: 15px; font-size: 0.9rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="loading">
+    <img src="img/icontest.png" alt="Loading">
+    <p>กำลังโหลด...</p>
+  </div>
+
+  <header>
+    <h1>นโยบาย</h1>
+    <p>student council policy</p>
+  </header>
+
+  <nav>
+    <a href="index.html">เกี่ยวกับเรา</a>
+    <a href="members.html">สมาชิก</a>
+    <a href="policy.html">นโยบาย</a>
+    <a href="https://www.instagram.com/pnptn_official?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">
+    ติดต่อเรา
+  </a>
+    <a href="https://www.tiktok.com/@pnptn.official?_r=1&_t=ZS-93V8OjMNyXS" target="_blank">Tiktok</a>
+    <a href="#report">แจ้งปัญหา</a>
+    <a href="#community">community</a>
+  </nav>
+
+  <section>
+    <h2>เลือกประเภทนโยบาย</h2>
+
+    <div class="policy-container">
+      <div class="policy-box" onclick="showPolicy('money')">Student economics & earning income</div>
+      <div class="policy-box" onclick="showPolicy('feedback')">Official Website & Feedback</div>
+      <div class="policy-box" onclick="showPolicy('Activities')">Activities & Creativity</div>
+      <div class="policy-box" onclick="showPolicy('volunteerism')">Volunteerism & Environment</div>
+      <div class="policy-box" onclick="showPolicy('education')">Education & Future Opportunities</div>
+      <div class="policy-box" onclick="showPolicy('esport')">Community & Connection</div>
+    </div>
+
+    <!-- ===== POLICY CONTENT ===== -->
+    <div id="money" class="policy-content">
+  <h2>Student Economics & Income</h2>
+  <p>
+    <strong>1. พื้นที่สร้างรายได้ของนักเรียน</strong><br>
+    เปิดพื้นที่ให้นักเรียนสามารถฝากโปรโมทร้านค้า ผลงาน หรือสินค้าของตนเอง  
+    ทั้งในรูปแบบออฟไลน์ภายในโรงเรียน และออนไลน์ผ่านเว็บไซต์ OFFICIAL ของพรรค  
+    เพื่อช่วยสร้างรายได้และประสบการณ์ด้านการค้าขายจริง<br><br>
+
+    <strong>2. ผลิตสินค้าคอลเล็กชันสภานักเรียน</strong><br>
+    จัดทำโบว์และสติกเกอร์คอลเล็กชันพิเศษของสภานักเรียน  
+    เปิดพรีออเดอร์เป็นชุด ๆ ผ่านฟอร์มบนเพจ Instagram และเว็บไซต์ OFFICIAL  
+    รายได้จะนำไปพัฒนากิจกรรมต่าง ๆ ภายในโรงเรียน
+  </p>
+</div>
+
+<div id="feedback" class="policy-content">
+  <h2>Official Website & Feedback</h2>
+  <p>
+    <strong>1. เว็บไซต์ OFFICIAL ของสภานักเรียน</strong><br>
+    จัดทำเว็บไซต์อย่างเป็นทางการของพรรค  
+    เพื่อเผยแพร่การทำงานของสภานักเรียน ข่าวสาร และกิจกรรมต่าง ๆ  
+    พร้อมระบบแจ้งปัญหาภายในโรงเรียนเพื่อนำไปพัฒนาต่อไปรวมไปถึงการออกแบบฟีเจอร์เว็บเกี่ยวกับการขายสินค้าคอลเล็กชั่นโบว์หรือสติกเกอร์ของเรา จะลงผ่านในเว็บไซส์เพื่อให้ผู้คนภายในโรงเรียนมากดพรีออเดอร์สั่งซื้อได้ง่ายและสะดวกมากยิ่งขึ้น<br><br>
+
+    <strong>2. ระบบแจ้งปัญหาและข้อเสนอแนะ</strong><br>
+    นักเรียนสามารถแจ้งปัญหา ข้อเสนอแนะ หรือความคิดเห็นได้ผ่านเว็บไซต์  
+    เพื่อให้สภานักเรียนเป็นตัวกลางในการประสานและพัฒนาโรงเรียนให้ดีขึ้น
+  </p>
+</div>
+
+<div id="Activities" class="policy-content">
+  <h2>Activities & Creativity</h2>
+  <p>
+    <strong>1. Music of Friday</strong><br>
+    เปิดพื้นที่ให้นักเรียนได้แสดงความสามารถด้านดนตรี  
+    หรือการแสดงต่าง ๆ เพื่อสร้างสีสันและความผ่อนคลายในวันศุกร์<br><br>
+
+    <strong>2. Festival Day & Theme Day</strong><br>
+    จัดกิจกรรมแต่งกายตามธีมในวันเทศกาลต่าง ๆ  
+    เพื่อเพิ่มความสนุกและความสามัคคีภายในโรงเรียน<br><br>
+
+    <strong>3. นิทรรศการศิลปะ & DIY Workshop</strong><br>
+    จัดนิทรรศการแสดงผลงานศิลปะ และกิจกรรม DIY  
+    เช่น ทำเคสโทรศัพท์ ทำเชือกผูกรองเท้า และงานสร้างสรรค์อื่น ๆ
+  </p>
+</div>
+
+<div id="volunteerism" class="policy-content">
+  <h2>Volunteerism & Environment</h2>
+  <p>
+    <strong>1. โครงการรับบริจาคของใช้สภาพดี</strong><br>
+    เปิดรับบริจาคของใช้ที่ไม่จำเป็นจากนักเรียนและบุคลากร  
+    เพื่อนำไปส่งต่อให้ผู้ยากไร้ ผู้บริจาคจะได้รับคะแนนพฤติกรรม  
+    โดยจัดกิจกรรมประมาณภาคเรียนละ 1 ครั้ง<br><br>
+
+    <strong>2. ถังขยะแยกตามคณะสี</strong><br>
+    ติดตั้งถังขยะแยกตามคณะสี  
+    เพื่อลดปริมาณขยะภายในโรงเรียน และสามารถนำไปใช้เป็นส่วนหนึ่ง  
+    ในการลดต้นทุนการจัดงานกีฬาสี
+  </p>
+</div>
+
+<div id="education" class="policy-content">
+  <h2>Education & Future Opportunities</h2>
+  <p>
+    <strong>1. แชร์กิจกรรม Open House และค่ายมหาวิทยาลัย</strong><br>
+    รวบรวมกิจกรรม Open House ค่าย และการแข่งขันจากมหาวิทยาลัยต่าง ๆ  
+    ทั้งภายในและภายนอกประเทศ มาเผยแพร่ผ่านเพจและเว็บไซต์ OFFICIAL  
+    เพื่อให้นักเรียนได้นำไปต่อยอดพอร์ตฟอลิโอและอนาคตการศึกษา
+  </p>
+</div>
+
+<div id="esport" class="policy-content">
+  <h2>Community & Connection</h2>
+  <p>
+    <strong>1. Community Discord โรงเรียน</strong><br>
+    สร้างพื้นที่ออนไลน์สำหรับนักเรียนในโรงเรียนธัญญบุรี  
+    เพื่อพูดคุย สอบถามเรื่องการเรียน ความบันเทิง และกีฬา  
+    ช่วยสร้างความสัมพันธ์และความสามัคคี  
+    โดยมีครูที่ปรึกษาคอยดูแลความเหมาะสม<br><br>
+
+    <strong>2. ระบบยืมร่มช่วงหน้าฝน</strong><br>
+    ให้บริการยืมร่มสำหรับนักเรียนและบุคลากร  
+    ลงทะเบียนผ่าน QR Code บนเพจ Instagram หรือเว็บไซต์ของพรรค  
+    พร้อมกำหนดวันยืมและวันคืนอย่างชัดเจน
+  </p>
+</div>
+  </section>
+
+  <footer>
+    <p>© 2026 สภานักเรียน</p>
+    <div class="footer-info">
+      <div><span>📞</span> 062-543-4950</div>
+
+    </div>
+    <div class="credit">created by promptix team</div>
+  </footer>
+
+  <script>
+    function showPolicy(type) {
+      document.querySelectorAll('.policy-content').forEach(p => p.style.display = 'none');
+      const target = document.getElementById(type);
+      target.style.display = 'block';
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loading').classList.add('hide');
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
